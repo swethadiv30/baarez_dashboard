@@ -11,6 +11,7 @@ export default function InsightsPanel({ rows }) {
   const [history, setHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [inputValue, setInputValue] = useState(""); 
 
   function buildDataSummary(rows) {
     const totalRevenue = rows.reduce(
@@ -28,44 +29,45 @@ export default function InsightsPanel({ rows }) {
   }
 
   async function handleAsk(question) {
-  if (!question) return;
+    if (!question) return;
 
-  setIsLoading(true);
-  setError("");
+    setIsLoading(true);
+    setError("");
 
-  const dataSummary = buildDataSummary(rows);
+    const dataSummary = buildDataSummary(rows);
 
-  try {
-    // Call API
-    const response = await fetch("/api/insights", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        question,
-        dataSummary,
-      }),
-    });
+    try {
+      const response = await fetch("/api/insights", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question,
+          dataSummary,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    await new Promise((resolve) =>
-      setTimeout(resolve, 1500)
-    );
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1500)
+      );
 
-    setHistory((prev) => [
-      ...prev,
-      { question, answer: data.answer },
-    ]);
-  } catch (err) {
-    setError(
-      "Sorry, I could not get an answer. Please try again."
-    );
+      setHistory((prev) => [
+        ...prev,
+        { question, answer: data.answer },
+      ]);
+
+      setInputValue("");
+    } catch (err) {
+      setError(
+        "Sorry, I could not get an answer. Please try again."
+      );
+    }
+
+    setIsLoading(false);
   }
-
-  setIsLoading(false);
-}
 
   return (
     <div className="p-6 bg-gray-100 mt-10">
@@ -73,14 +75,16 @@ export default function InsightsPanel({ rows }) {
         AI Insights
       </h2>
 
-      <SuggestionChips onAsk={handleAsk} />
+      <SuggestionChips onSelect={(q) => setInputValue(q)} />
+
       <QuestionInput
-        onAsk={handleAsk}
+        value={inputValue}
+        setValue={setInputValue}
+        onAsk={() => handleAsk(inputValue)}
         isLoading={isLoading}
       />
 
       {isLoading && <LoadingIndicator />}
-
       {error && <ErrorMessage message={error} />}
 
       <div className="space-y-4 mt-6">

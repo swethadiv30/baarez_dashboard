@@ -1,4 +1,4 @@
-export default function SuggestionChips({ onAsk }) {
+export default function SuggestionChips({ onSelect }) {
   const suggestions = [
     "Which product had the highest revenue?",
     "Which region has the lowest sales?",
@@ -10,7 +10,7 @@ export default function SuggestionChips({ onAsk }) {
       {suggestions.map((text, i) => (
         <button
           key={i}
-          onClick={() => onAsk(text)}
+          onClick={() => onSelect(text)}
           className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-200"
         >
           {text}

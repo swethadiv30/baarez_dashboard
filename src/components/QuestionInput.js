@@ -1,25 +1,20 @@
-import { useState } from "react";
-
 export default function QuestionInput({
+  value,
+  setValue,
   onAsk,
   isLoading,
 }) {
-  const [question, setQuestion] = useState("");
-
   function handleSubmit() {
-    if (!question.trim()) return;
-    onAsk(question);
-    setQuestion("");
+    if (!value.trim()) return;
+    onAsk();
   }
 
   return (
     <div className="flex gap-2">
       <input
         type="text"
-        value={question}
-        onChange={(e) =>
-          setQuestion(e.target.value)
-        }
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         onKeyDown={(e) =>
           e.key === "Enter" && handleSubmit()
         }

@@ -26,13 +26,18 @@ export default function KPICards({ rows }) {
     return (
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {cards.map((card, i) => (
-                <div key={i} className="bg-white shadow p-5 rounded">
-                    <p className="text-black font-bold text-xl">{card.title}:</p>
-                    <h2 className="text-lg font-medium mt-2">{card.value}</h2>
+                <div
+                    key={i}
+                    className="bg-white shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 p-6 rounded-2xl border border-gray-100"
+                >
+                    <p className="text-gray-600 font-semibold text-sm uppercase tracking-wide">
+                        {card.title}
+                    </p>
+                    <h2 className="text-2xl font-bold mt-3 text-gray-900">
+                        {card.value}
+                    </h2>
                 </div>
             ))}
-
-
         </div>
     )
 }
